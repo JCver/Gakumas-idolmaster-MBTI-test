@@ -398,11 +398,11 @@
               return { ...char, distance: dist, rawRate: finalRate };
             });
 
-            // --- 娱乐化分数修饰机制 (锚定 75% ~ 90%) ---
+            // --- 娱乐化分数修饰机制 (锚定 75% ~ 85%) ---
             let maxRaw = Math.max(...rawCharScores.map(s => s.rawRate));
             
-            // 引入 75~90 锚点 + 3% 随机抖动，确保同一套答案结果也有细微数值差异
-            let targetTopScore = 75 + (Math.random() * 12) + (Math.abs(boostedScores[userDominant]) % 3);
+            // 引入 75~85 锚点 + 3% 随机抖动，确保同一套答案结果也有细微数值差异
+            let targetTopScore = 75 + (Math.random() * 8) + (Math.abs(boostedScores[userDominant]) % 3);
             let inflation = Math.max(0, targetTopScore - maxRaw);
 
             let scores = rawCharScores.map(char => {
