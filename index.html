@@ -1,15 +1,17 @@
-<!DOCTYPE html>
+
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
     
-    <title>初星学园 8D 性格测评 (v1.2.1)</title>
+    <title>初星学园 8D 性格测评 (v1.2.2)</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
+    
     <style>
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -23,7 +25,6 @@
     <script type="text/babel">
         const { useState, useMemo, useEffect } = React;
 
-        // --- 原生 React SVG 图标组件 ---
         const Icon = ({ name, size = 24, className = '', fill = 'none' }) => {
             const svgProps = {
                 xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: fill, stroke: "currentColor",
@@ -45,7 +46,6 @@
             }
         };
 
-        // --- 0. 多语言字典 ---
         const T = {
           zh: {
             appTitle: '初星学园',
@@ -127,7 +127,6 @@
           }
         };
 
-        // --- 1. 角色数据与特征维度 (8-Dimension: E, J, T, C, M, O, A, U) ---
         const CHARACTERS = [
           { id: 'sena', image: 'https://free.picui.cn/free/2026/04/12/69db898976ec7.png',
             name: { zh: '十王星南', en: 'Sena Juo', ja: '十王星南' }, color: 'bg-amber-500', text: 'text-amber-500', bgLight: 'bg-amber-50', border: 'border-amber-500', 
@@ -151,7 +150,7 @@
             traits: { E: 5, J: 5, T: -5, C: 4, M: 4, O: -1, A: 9, U: -3 } },
           { id: 'temari', image: 'https://free.picui.cn/free/2026/04/12/69db898cb8276.png',
             name: { zh: '月村手毬', en: 'Temari Tsukimura', ja: '月村手毬' }, color: 'bg-blue-500', text: 'text-blue-500', bgLight: 'bg-blue-50', border: 'border-blue-500', 
-            desc: { zh: '对自己和他人要求极严的傲娇。对自身实力充满绝对自信，但内心笨拙且需要陪伴。', en: 'A tsundere who is strict with herself and others. Absolutely confident in her skills, but highly pessimistic and clumsy inside.', ja: '自分にも他人にも厳しいツンデレ。実力には絶対の自信を持つが、悲観的で実は不器用で寂しがり屋。' }, 
+            desc: { zh: '对自己和他人要求极严的傲娇。对自身实力充满绝对自信，但极度悲观且内心笨拙。', en: 'A tsundere who is strict with herself and others. Absolutely confident in her skills, but highly pessimistic and clumsy inside.', ja: '自分にも他人にも厳しいツンデレ。実力には絶対の自信を持つが、悲観的で実は不器用で寂しがり屋。' }, 
             traits: { E: -4, J: 6, T: -4, C: 6, M: 8, O: -3, A: 7, U: -1 } },
           { id: 'kotone', image: 'https://free.picui.cn/free/2026/04/12/69db89896f494.png',
             name: { zh: '藤田琴音', en: 'Kotone Fujita', ja: '藤田ことね' }, color: 'bg-yellow-400', text: 'text-yellow-500', bgLight: 'bg-yellow-50', border: 'border-yellow-400', 
@@ -189,7 +188,6 @@
 
         const OPTION_VALUES = [2, 1, 0, -1, -2];
 
-        // --- 2. 测试题库构建 (40题, 覆盖8个维度) ---
         const QUESTIONS = [
           { dim: 'E', sign: 1, text: { zh: "在拥挤的活动现场，哪怕没有熟人，你也能很自然地主动向陌生人搭话。", en: "At a crowded event, even without acquaintances, you naturally strike up conversations.", ja: "混雑したイベントで、知り合いがいなくても自然と見知らぬ人に話しかけられる。" } },
           { dim: 'E', sign: -1, text: { zh: "结束了一周的高强度工作/学习后，你倾向于独自静静恢复，被叫出去会觉得很累。", en: "After a busy week, you prefer to recover quietly alone; going out feels exhausting.", ja: "忙しい1週間を終えた後、一人静かに回復したい。外に誘われると疲れる。" } },
@@ -221,7 +219,7 @@
           { dim: 'O', sign: 1, text: { zh: "即使在极度有压力的逆境中，你也能在一地鸡毛里找到值得开心的小事。", en: "Even in highly stressful adversity, you can find small things to be happy about.", ja: "極度のストレスを感じる逆境でも、ちょっとした幸せを見つけることができる。" } },
           { dim: 'O', sign: -1, text: { zh: "你经常会被对未来的焦虑感压得喘不过气，担心那些还没发生的问题。", en: "You are often overwhelmed by anxiety about the future, worrying about problems that haven't happened.", ja: "未来への不安に押し潰されそうになり、まだ起きていない問題を心配することがよくある。" } },
           { dim: 'O', sign: 1, text: { zh: "你拥有一种“船到桥头自然直”的松弛感，不会因为一时的失败而否定全盘。", en: "You have a relaxed 'things will work out' attitude and don't let temporary failures define everything.", ja: "「なんとかなる」という気楽さがあり、一時的な失敗で全てを否定することはない。" } },
-          { dim: 'A', sign: 1, text: { zh: "在小组合作中有人拖后腿，你会优先考虑TA是否遇到困难并提供帮助，而不是立刻指责。", en: "If someone lags in group work, you prioritize considering if they have difficulties and offer help.", ja: "グループ作業で誰かが足を引っ張った場合、すぐに責めるのではなく、困難がないか考え助けようとする。" } },
+          { dim: 'A', sign: 1, text: { zh: "在小组合作中有人拖后腿，你会优先考虑TA是否遇到困难并提供帮助，而不是立刻指责。", en: "If someone lags in group work, you prioritize considering if they have difficulties and offer help.", ja: "グループ作業で谁かが足を引っ張った場合、すぐに責めるのではなく、困難がないか考え助けようとする。" } },
           { dim: 'A', sign: 1, text: { zh: "你很难拒绝别人的请求，有时甚至为了帮别人而委屈自己，牺牲私人时间。", en: "It's hard to refuse requests; sometimes you compromise yourself to help others.", ja: "頼み事を断るのが苦手で、他人のために自分を犠牲にし、休息時間を削ってしまう。" } },
           { dim: 'A', sign: -1, text: { zh: "在竞技中，你认为“赢”是唯一目的，为了胜利可以使用任何规则允许的手段而不顾人情。", en: "In competition, winning is the sole purpose, using any allowed means regardless of feelings.", ja: "競技において「勝つ」ことが唯一の目的であり、人情を気にせずルールで許される手段を使う。" } },
           { dim: 'A', sign: 1, text: { zh: "看到新闻里陌生人的不幸遭遇，你会感到强烈的共鸣，甚至感到真实的难过。", en: "Seeing strangers' misfortunes on the news, you feel strong empathy and real sadness.", ja: "ニュースで見知らぬ人の不幸を見ると、強く感情移入し、本当に悲しくなる。" } },
@@ -233,7 +231,6 @@
           { dim: 'U', sign: -1, text: { zh: "你认为遵从社会的传统期望（如按部就班地升学、工作）是最稳妥、值得追求的人生路径。", en: "You believe conforming to society's traditional expectations is the safest life path.", ja: "社会の伝統的な期待（順調に進学し、仕事に就くなど）に従うことが、最も無难なルートだと考える。" } }
         ];
 
-        // --- 头像渲染组件 ---
         const Avatar = ({ char, lang, isLarge = false }) => {
           const hasImage = char.image && char.image.trim() !== '';
           return (
@@ -255,7 +252,6 @@
           );
         };
 
-        // --- 3. 可自适应缩放的 8边形雷达图组件 ---
         const RadarChart = ({ userTraits, charTraits, charColorClass, size = 280, lang }) => {
           const center = size / 2;
           const radius = (size / 2) * 0.65; 
